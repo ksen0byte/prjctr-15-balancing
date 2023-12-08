@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  load_balancer:
+    image: karljohns0n/nginx-more
+    volumes:
+      - ./nginx/load_balancer.conf:/etc/nginx/nginx.conf
+      - ./geoip:/etc/nginx/geoip
+    ports:
+      - "80:80"
+
+  uk_server:
+    image: nginx
+    volumes:
+      - ./nginx/uk_server.conf:/etc/nginx/nginx.conf
+
+  us_server_1:
+    image: nginx
+    volumes:
+      - ./nginx/us_server_1.conf:/etc/nginx/nginx.conf
+
+  us_server_2:
+    image: nginx
+    volumes:
+      - ./nginx/us_server_2.conf:/etc/nginx/nginx.conf
+
+  row_server:
+    image: nginx
+    volumes:
+      - ./nginx/row_server.conf:/etc/nginx/nginx.conf
+
+  backup_server:
+    image: nginx
+    volumes:
+      - ./nginx/backup_server.conf:/etc/nginx/nginx.conf
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok/ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040

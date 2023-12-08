@@ -1,0 +1,7 @@
+version: 2
+web_addr: localhost:4040
+authtoken: ${NGROK_AUTH_TOKEN}
+tunnels:
+  loadbalancer:
+    addr: load_balancer:80
+    proto: http
